@@ -1,5 +1,5 @@
 rlightning
-=========
+==========
 
 .. toctree::
    :maxdepth: 4

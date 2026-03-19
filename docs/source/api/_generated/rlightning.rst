@@ -1,10 +1,10 @@
 rlightning
-=========
+==========
 
 .. automodule:: rlightning
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Subpackages
 -----------
@@ -15,6 +15,9 @@ Subpackages
    rlightning.buffer
    rlightning.engine
    rlightning.env
+   rlightning.humanoid
+   rlightning.models
    rlightning.policy
    rlightning.types
+   rlightning.utils
    rlightning.weights

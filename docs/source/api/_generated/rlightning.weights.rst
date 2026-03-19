@@ -1,10 +1,10 @@
 rlightning.weights
-=================
+==================
 
 .. automodule:: rlightning.weights
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------

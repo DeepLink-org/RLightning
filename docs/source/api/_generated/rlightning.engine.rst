@@ -1,10 +1,10 @@
 rlightning.engine
-================
+=================
 
 .. automodule:: rlightning.engine
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------
@@ -16,6 +16,5 @@ Submodules
    rlightning.engine.async_rsl_rl_engine
    rlightning.engine.base_engine
    rlightning.engine.evaluation_engine
-   rlightning.engine.nfsp_engine
    rlightning.engine.rsl_rl_engine
    rlightning.engine.sync_rl_engine

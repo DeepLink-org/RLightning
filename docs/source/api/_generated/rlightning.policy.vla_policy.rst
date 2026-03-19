@@ -1,10 +1,10 @@
 rlightning.policy.vla\_policy
-============================
+=============================
 
 .. automodule:: rlightning.policy.vla_policy
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------

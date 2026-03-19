@@ -1,10 +1,10 @@
 rlightning.buffer
-================
+=================
 
 .. automodule:: rlightning.buffer
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Subpackages
 -----------
@@ -22,7 +22,5 @@ Submodules
 
    rlightning.buffer.base_buffer
    rlightning.buffer.replay_buffer
-   rlightning.buffer.reservoir_buffer
    rlightning.buffer.rollout_buffer
    rlightning.buffer.sampler
-   rlightning.buffer.simple_buffer

@@ -1,10 +1,10 @@
 rlightning.env
-=============
+==============
 
 .. automodule:: rlightning.env
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Subpackages
 -----------
@@ -13,6 +13,7 @@ Subpackages
    :maxdepth: 4
 
    rlightning.env.remote_env
+   rlightning.env.utils
 
 Submodules
 ----------
@@ -26,6 +27,7 @@ Submodules
    rlightning.env.env_server
    rlightning.env.isaac_env
    rlightning.env.isaac_marl_env
+   rlightning.env.libero_env
    rlightning.env.maniskill_env
    rlightning.env.mujoco_env
    rlightning.env.piper_env

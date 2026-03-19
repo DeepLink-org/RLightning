@@ -1,10 +1,10 @@
 rlightning.types
-===============
+================
 
 .. automodule:: rlightning.types
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------

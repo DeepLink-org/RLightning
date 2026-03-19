@@ -1,10 +1,10 @@
 rlightning.env.remote\_env
-=========================
+==========================
 
 .. automodule:: rlightning.env.remote_env
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------

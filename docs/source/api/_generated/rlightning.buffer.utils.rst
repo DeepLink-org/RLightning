@@ -1,10 +1,10 @@
 rlightning.buffer.utils
-======================
+=======================
 
 .. automodule:: rlightning.buffer.utils
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------
