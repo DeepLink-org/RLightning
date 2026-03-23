@@ -1,9 +1,0 @@
-defaults:
-  - client: zmq
-  - _self_
-
-name: "maniskill/StackCube-v1"
-backend: "maniskill"
-task: "StackCube-v1"
-num_envs: 1
-max_episode_steps: 50
