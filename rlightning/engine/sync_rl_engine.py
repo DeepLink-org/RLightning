@@ -223,13 +223,14 @@ class SyncRLEngine(BaseEngine):
             if self.config.train.eval_interval > 0 and self.epoch % self.config.train.save_interval == 0:
                 ckpt_path = f"{self.config.train.save_dir}/epoch_{self.epoch}.pt"
                 self.policy_group.save_checkpoint(path=ckpt_path)
+            
+            # sync weights after training and save checkpoint    
+            self._sync_weights()
 
             if self.config.train.eval_interval > 0 and self.epoch % self.config.train.eval_interval == 0:
                 logger.info(f"Evaluating at epoch {self.epoch}")
                 self._evaluate(obj_set="train", prefix="eval")
                 self._evaluate(obj_set="test", prefix="eval_ood")
-            
-            self._sync_weights()
 
             if InternalFlag.DEBUG:
                 self.print_timing_summary()
