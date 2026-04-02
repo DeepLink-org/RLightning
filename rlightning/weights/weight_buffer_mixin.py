@@ -178,7 +178,7 @@ class WeightBufferMixin:
         actual_model = self.model.module if isinstance(self.model, DDP) else self.model
         for name, param in actual_model.named_parameters():
             if param.data.storage().size() > 0:
-                self.cpu_param_backup[name] = (param.data.cpu(), param.data.size())
+                self.cpu_param_backup[name] = (param.data.detach().cpu().clone(), param.data.size())
                 _free_storage(param.data)
             if offload_grad and param.grad is not None:
                 param.grad = param.grad.to("cpu", non_blocking=True)
