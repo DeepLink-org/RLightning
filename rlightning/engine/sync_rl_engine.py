@@ -215,24 +215,21 @@ class SyncRLEngine(BaseEngine):
         Executes the training loop for the configured number of epochs,
         performing rollout, training, and periodic evaluation.
         """
-        logger.info("Evaluating before training...")
-        self._evaluate(obj_set="train", prefix="eval")
-        self._evaluate(obj_set="test", prefix="eval_ood")
-
         for self.epoch in self.iter_epochs(num_epochs=self.config.train.max_epochs):
             self._rollout(obj_set="train", prefix="rollout")
             self._update_dataset()
             self._train()
-            self._sync_weights()
 
-            if self.config.train.eval_interval > 0 and (self.epoch + 1) % self.config.train.save_interval == 0:
+            if self.config.train.eval_interval > 0 and self.epoch % self.config.train.save_interval == 0:
                 ckpt_path = f"{self.config.train.save_dir}/epoch_{self.epoch}.pt"
                 self.policy_group.save_checkpoint(path=ckpt_path)
 
-            if self.config.train.eval_interval > 0 and (self.epoch + 1) % self.config.train.eval_interval == 0:
+            if self.config.train.eval_interval > 0 and self.epoch % self.config.train.eval_interval == 0:
                 logger.info(f"Evaluating at epoch {self.epoch}")
                 self._evaluate(obj_set="train", prefix="eval")
                 self._evaluate(obj_set="test", prefix="eval_ood")
+            
+            self._sync_weights()
 
             if InternalFlag.DEBUG:
                 self.print_timing_summary()
