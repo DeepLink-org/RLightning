@@ -565,36 +565,20 @@ class BasePolicy(nn.Module, RayActorMixin, WeightBufferMixin, ABC):
         ckpt_folder = Path(path).parent
         os.makedirs(ckpt_folder, exist_ok=True)
 
-        model_for_offload = getattr(self, "model", None)
-        actual_model = None
-        if model_for_offload is not None:
-            actual_model = model_for_offload.module if isinstance(model_for_offload, DDP) else model_for_offload
-
-        params_were_offloaded = False
-        if actual_model is not None:
-            params_were_offloaded = any(
-                name in self.cpu_param_backup and param.data.storage().size() == 0
-                for name, param in actual_model.named_parameters()
-            )
-        if params_were_offloaded:
+        model_was_offloaded = getattr(self, "_model_params_offloaded", False)
+        if model_was_offloaded:
             self.reload_model_param_and_grad(load_grad=False)
 
-        state: Dict[str, Dict] = {}
-        for name, model in self.model_list:
-            if isinstance(model, DDP):
-                module = model.module
-            else:
-                module = model
-            module_state = module.state_dict()
-            if params_were_offloaded:
-                state[name] = clone_checkpoint_value(module_state)
-            else:
-                state[name] = module_state
+        try:
+            state: Dict[str, Dict] = {}
+            for name, model in self.model_list:
+                module = model.module if isinstance(model, DDP) else model
+                state[name] = clone_checkpoint_value(module.state_dict())
 
-        torch.save(state, path)
-
-        if params_were_offloaded:
-            self.offload_model_param_and_grad(offload_grad=False)
+            torch.save(state, path)
+        finally:
+            if model_was_offloaded:
+                self.offload_model_param_and_grad(offload_grad=False)
 
     def reset_training_state(
         self, train_config: TrainConfig, env_meta: Optional[Any] = None, seed: Optional[int] = None

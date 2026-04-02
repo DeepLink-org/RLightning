@@ -72,7 +72,7 @@ def test_clone_checkpoint_value_produces_loadable_cpu_tensors(tmp_path):
 
 
 def test_save_checkpoint_round_trips_offloaded_parameters(tmp_path, monkeypatch):
-    """save_checkpoint should temporarily reload zero-storage params and restore offload state."""
+    """save_checkpoint should temporarily reload an offloaded model and restore its state."""
     policy = _make_policy()
     original_state = {name: tensor.detach().cpu().clone() for name, tensor in policy.linear.state_dict().items()}
     monkeypatch.setattr(policy, "clear_memory", lambda sync=False: None)
@@ -84,6 +84,7 @@ def test_save_checkpoint_round_trips_offloaded_parameters(tmp_path, monkeypatch)
     for name, param in policy.linear.named_parameters():
         policy.cpu_param_backup[name] = (param.data.detach().cpu().clone(), param.data.size())
         _free_storage(param.data)
+    policy._model_params_offloaded = True
 
     for param in policy.linear.parameters():
         assert param.data.storage().size() == 0
@@ -99,3 +100,22 @@ def test_save_checkpoint_round_trips_offloaded_parameters(tmp_path, monkeypatch)
 
     for param in policy.linear.parameters():
         assert param.data.storage().size() == 0
+
+
+def test_save_checkpoint_does_not_treat_stale_cpu_backup_as_offloaded(tmp_path):
+    """Existing cpu backups should not affect checkpointing when the model is not offloaded."""
+    policy = _make_policy()
+
+    mutated_weight = torch.full_like(policy.linear.weight, 7.0)
+    backup_weight = torch.full_like(policy.linear.weight, -3.0)
+
+    with torch.no_grad():
+        policy.linear.weight.copy_(mutated_weight)
+    policy.cpu_param_backup["weight"] = (backup_weight.clone(), policy.linear.weight.data.size())
+    policy._model_params_offloaded = False
+
+    checkpoint_path = tmp_path / "epoch_2" / "model.pt"
+    policy.save_checkpoint(checkpoint_path)
+
+    state = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+    torch.testing.assert_close(state["linear"]["weight"], mutated_weight.cpu())

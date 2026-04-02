@@ -43,6 +43,7 @@ class WeightBufferMixin:
 
         # for offload model param and grad
         self.cpu_param_backup = {}
+        self._model_params_offloaded = False
 
     def init_weight_buffer(self, shared_weight_buffer=None):
         """Initialize the weight buffer."""
@@ -181,6 +182,7 @@ class WeightBufferMixin:
                 _free_storage(param.data)
             if offload_grad and param.grad is not None:
                 param.grad = param.grad.to("cpu", non_blocking=True)
+        self._model_params_offloaded = True
         self.clear_memory(sync=True)
         profiler.log_gpu_memory_usage("offload_model_param_and_grad")
 
@@ -198,6 +200,7 @@ class WeightBufferMixin:
 
             if load_grad and param.grad is not None:
                 param.grad = param.grad.to(self.device, non_blocking=True)
+        self._model_params_offloaded = False
         self.clear_memory(sync=True)
         profiler.log_gpu_memory_usage("reload_model_param_and_grad")
 
