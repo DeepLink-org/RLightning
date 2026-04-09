@@ -1,0 +1,66 @@
+imports:
+  - tests.tests_utils.mini_experiment
+
+engine: asyncrl
+debug: false
+verbose: false
+
+env:
+  name: mini_counter_async
+  backend: mini_counter
+  task: MiniCounter-v0
+  num_workers: 1
+  num_envs: 1
+  max_episode_steps: 4
+
+buffer:
+  type: ReplayBuffer
+  capacity: 128
+  sampler:
+    type: uniform
+  storage:
+    type: unified
+    unit: transition
+    device: cpu
+
+policy:
+  type: MiniAsyncPolicy
+  rollout_mode: async
+  train_num_gpus: 0.0
+  eval_num_gpus: 0.0
+  weight_buffer:
+    type: WeightBuffer
+    buffer_strategy: Double
+  optim_cfg:
+    lr: 0.05
+
+train:
+  max_epochs: 1
+  max_rollout_steps: 4
+  batch_size: 8
+  eval_interval: -1
+  save_interval: -1
+  inner_updates: 2
+
+cluster:
+  ray_address: local
+  train_worker_num: 1
+  eval_worker_num: 1
+  train_each_gpu_num: 0.0
+  eval_each_gpu_num: 0.0
+  buffer_worker_num: 1
+  remote_train: true
+  remote_eval: true
+  remote_storage: false
+  remote_env: false
+  placement:
+    mode: auto
+    strategy: default
+    env_strategy: default
+
+log:
+  backend: tensorboard
+  level: INFO
+  log_dir: ./runs
+  project: tests
+  name: mini_asyncrl_remote
