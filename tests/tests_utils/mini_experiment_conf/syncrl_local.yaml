@@ -1,0 +1,50 @@
+imports:
+  - tests.tests_utils.mini_experiment
+
+engine: syncrl
+debug: false
+verbose: false
+
+env:
+  name: mini_counter_local
+  backend: mini_counter
+  task: MiniCounter-v0
+  num_workers: 1
+  num_envs: 1
+  max_episode_steps: 4
+
+buffer:
+  type: RolloutBuffer
+  capacity: 64
+  sampler:
+    type: all
+  storage:
+    type: unified
+    unit: transition
+    device: cpu
+
+policy:
+  type: MiniSyncPolicy
+  rollout_mode: sync
+  train_num_gpus: 0.0
+  eval_num_gpus: 0.0
+  weight_buffer:
+    type: WeightBuffer
+    buffer_strategy: Double
+  optim_cfg:
+    lr: 0.05
+
+train:
+  max_epochs: 1
+  max_rollout_steps: 4
+  batch_size: 4
+  eval_interval: -1
+  save_interval: -1
+  inner_updates: 2
+
+log:
+  backend: tensorboard
+  level: INFO
+  log_dir: ./runs
+  project: tests
+  name: mini_syncrl_local

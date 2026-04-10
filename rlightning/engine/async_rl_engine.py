@@ -249,7 +249,7 @@ class AsyncRLEngine(BaseEngine):
                 self.coordinator.wait_for_dataset_ready()
                 self.coordinator.wait_for_weights_updated()
                 self._train()
-                if self.config.train.save_interval > 0 and (self.epoch + 1) % self.config.train.save_interval == 0:
+                if self.config.train.save_interval > 0 and self.epoch % self.config.train.save_interval == 0:
                     ckpt_path = f"{self.config.train.save_dir}/epoch_{self.epoch}.pt"
                     self.policy_group.save_checkpoint(path=ckpt_path)
                 self.coordinator.notify_train_step_done()

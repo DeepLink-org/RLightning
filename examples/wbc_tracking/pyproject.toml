@@ -15,9 +15,18 @@ override-dependencies = [
     "sympy==1.13.1"
 ]
 
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple"
+
+[[tool.uv.index]]
+name = "nvidia"
+url = "https://pypi.nvidia.com"
+
 [tool.uv.sources]
 rlightning = {path = "../../", editable = true}
 rsl-rl = {path = "../../third_party/rsl_rl", editable = true}
+isaaclab = { index = "nvidia" }
 
 [tool.uv.extra-build-dependencies]
 flatdict = ["setuptools<81"]

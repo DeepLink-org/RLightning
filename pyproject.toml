@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=80.8.0,<81", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "rlightning"
 version = "0.1.0"
@@ -26,7 +30,7 @@ dependencies = [
     "transformers",
     "uvloop",
     "wandb",
-    "zmq",
+    "pyzmq",
     "zstandard>=0.25.0",
 ]
 
@@ -34,6 +38,8 @@ dependencies = [
 dev = [
     "debugpy>=1.8.14",
     "ipython",
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
 ]
 isaaclab = [
     "isaaclab[isaacsim]==2.2.0",
@@ -54,11 +60,15 @@ humanoid = [
     "scipy",
     "easydict",
     "joblib",
-    "smplx @ git+https://github.com/ZhengyiLuo/smplx.git@master",
-    "smpl-sim @ git+https://github.com/ZhengyiLuo/SMPLSim.git@master",
     "open3d==0.19.0",
     "natsort==8.4.0",
     "mink==0.0.13",
+]
+
+[dependency-groups]
+humanoid-dev = [
+    "smplx @ git+https://github.com/ZhengyiLuo/smplx.git@master",
+    "smpl-sim @ git+https://github.com/ZhengyiLuo/SMPLSim.git@master",
 ]
 
 
@@ -72,6 +82,19 @@ pythonVersion = "3.11"
 typeCheckingMode = "off"
 reportMissingImports = false
 reportMissingModuleSource = false
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra -m 'not integration and not slow and not gpu and not maniskill and not isaaclab and not e2e'"
+markers = [
+    "slow: marks tests that are slower or intended for scheduled regression runs",
+    "gpu: marks tests that require a GPU runtime",
+    "integration: marks tests that cover multiple components working together",
+    "e2e: marks end-to-end CLI or workflow tests",
+    "maniskill: marks tests that require the ManiSkill stack",
+    "isaaclab: marks tests that require the IsaacLab stack",
+]
 
 [tool.setuptools.packages.find]
 include = ["rlightning*"]
