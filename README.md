@@ -3,18 +3,16 @@
   RLightning
 </h1>
 
+<p align="center">English | <a href="README-ZH.md">中文</a></p>
+
 <p align="center"><strong>A Flexible Reinforcement Learning Framework that Unifies Prototyping and Scaling for Embodied Intelligence</strong></p>
 
 <p align="center">
   <img src="docs/source/_static/images/big2.png" alt="RLightning showcase" width="500" />
 </p>
-<!-- Replace the placeholder URLs below with your actual project links. -->
 <p align="center">
   <a href="https://rlightning.readthedocs.io/en/latest/">
     <img src="https://img.shields.io/badge/Docs-Website-0F766E?style=for-the-badge" alt="Documentation" />
-  </a>
-  <a href="https://arxiv.org/abs/your-paper-id">
-    <img src="https://img.shields.io/badge/Paper-Coming_Soon-B91C1C?style=for-the-badge" alt="Paper" />
   </a>
 </p>
 
